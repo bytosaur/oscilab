@@ -2,10 +2,10 @@
 a fun project for sound synthesis
 
 # features
-drawing a sound in frequency or time domain
-spectrogram
-simple oscilators and filters
+1. drawing a sound in frequency or time domain
+2. spectrogram
+3. simple oscilators and filters
 
 # todo 
-fix color code of spectrogram
-fix the UI :D
+1. fix color code of spectrogram
+2. fix the UI :D
