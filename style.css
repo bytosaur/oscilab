@@ -1,0 +1,109 @@
+.header{
+    height: 4vh;
+    width: 100vw;
+    background: #6666d1;
+    padding: 2vh;
+}
+
+.controls{
+    width: 90vw;
+    display: flex;
+    direction: row;
+    justify-content: space-evenly;
+}
+
+.slidecontainer {
+    margin-top: 12px;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.sliderdiv {
+    display: flex;
+    direction: column;
+}
+
+
+canvas{
+      user-select: none;
+}
+  
+body {
+      background: #c795aa;
+      color: white;
+      padding: 0 !important;
+      margin: 0 !important;
+}
+
+canvas#spectrum {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
+                0 3px 4px rgba(0,0,0,0.7);
+}
+canvas#waveform {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
+                0 3px 4px rgba(0,0,0,0.7);
+}
+.visual_container{
+    width: 90vw;
+    display: flex;
+    justify-content: space-evenly;
+    flex-flow: row wrap;
+    height: 40vh;
+}
+.analyser_container{
+    width: 40vw;
+    display: flex;
+    justify-content: flex-start;
+    flex-flow: column wrap;
+}
+.visualizer{
+    width: 40vw;
+    height: 15vh;
+}
+.wave_draw_canvas{
+    width: 40vw;
+    height: 30vh;
+}
+.slider {
+    -webkit-appearance: none;  /* Override default CSS styles */
+    appearance: none;
+    background: #d3d3d3; /* Grey background */
+    outline: none; /* Remove outline */
+    opacity: 0.7; /* Set transparency (for mouse-over effects on hover) */
+    -webkit-transition: .2s; /* 0.2 seconds transition on hover */
+    transition: opacity .2s;
+    margin: 20px;
+    padding: 0;
+    border-radius: 10px;
+    display: inline;
+}
+.slider:hover {
+    opacity: 1; /* Fully shown on mouse-over */
+}
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Override default look */
+    appearance: none;
+    width: 50px; /* Set a specific slider handle width */
+    height: 50px; /* Slider handle height */
+    background: yellow; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+    border-radius: 50%;
+}
+.slider::-moz-range-thumb {
+    width: 25px; /* Set a specific slider handle width */
+    height: 25px; /* Slider handle height */
+    background: #4CAF50; /* Green background */
+    cursor: pointer; /* Cursor on hover */
+}
+input[type=range]
+{
+    writing-mode: bt-lr; /* IE */
+    -webkit-appearance: slider-vertical; /* WebKit */
+    width: 8px;
+    height: 175px;
+    padding: 0 5px;    
+}

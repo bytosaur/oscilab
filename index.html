@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Document</title>
+    <script>
+
+    </script>
+</head>
+<body>
+
+    <div class="header">
+        woody's Synth-Lab
+    </div>
+
+    <div class="controls">
+        <div class="slidecontainer" id="slide_con">
+            <h3>
+                osc
+            </h3>
+            <div class="sliderdiv">
+                <div>pitch</div>
+                <input type="range" orient="vertical" min="1" max="100" value="50" class="slider" id="freq_slider">
+            </div>
+            <div class="sliderdiv">
+                <div>main amp</div>
+                <input type="range" orient="vertical" min="1" max="100" value="50" class="slider" id="amp_slider">
+            </div>
+            <div class="sliderdiv">
+                <div>sub amp</div>
+                <input type="range" orient="vertical" min="1" max="100" value="50" class="slider" id="sub_slider">
+            </div>
+            <select id="osc_main_type_select">
+                <option value="triangle">tri</option>
+                <option value="sine">sin</option>
+                <option value="square">sqr</option>
+            </select>
+            <select id="osc_sub_type_select">
+                <option value="triangle">tri</option>
+                <option value="sine">sin</option>
+                <option value="square">sqr</option>
+            </select>
+        </div>
+
+        <div class="slidecontainer" id="slide_con2">
+            <h3>
+                lpf
+            </h3>
+            <div class="sliderdiv">
+                <div>cutoff</div>
+                <input type="range" min="1" max="100" value="50" class="slider" id="cutoff_slider">
+            </div>
+            <div class="sliderdiv">
+                <div>resonance</div>
+                <input type="range" min="1" max="100" value="50" class="slider" id="resonance_slider">
+            </div>
+            <select id="filter_type_select">
+                <option value="highpass">hp</option>
+                <option value="lowpass">lp</option>
+                <option value="bandpass">bp</option>
+            </select>
+        </div>
+
+        <div class="slidecontainer" id="slide_con3">
+            <h3>
+                lfo
+            </h3>        
+            <div class="sliderdiv">
+                <div>frequency</div>
+                <input type="range" min="1" max="100" value="50" class="slider" id="lfo_freq_slider">
+            </div>       
+            <div class="sliderdiv">
+                <div>intensity</div>
+                <input type="range" min="1" max="100" value="0" class="slider" id="lfo_amp_slider">
+            </div>
+            <select id="lfo_type_select">
+                <option value="triangle">tri</option>
+                <option value="sine">sin</option>
+                <option value="square">sqr</option>
+                </select>
+        </div>
+    </div>
+    <br>
+    <br>
+    <br>
+    
+    <input type="button" id="mute_button"> mute
+
+
+    <select id="wave_draw_select">
+        <option value="time">time</option>
+        <option value="frequency">frequency</option>
+     </select>
+
+     <div class="visual_container">
+        <canvas id="waveform" draggable="false" class="wave_draw_canvas"></canvas>
+
+        <div class="analyser_container">
+            <canvas id="spectrum" draggable="false" class="visualizer" ></canvas>
+            <br>
+            <canvas id="spectrogramm" draggable="false" class="visualizer" ></canvas>
+        </div>
+    </div>
+</body>
+
+<script src="main.js"></script>
+
+</html>
