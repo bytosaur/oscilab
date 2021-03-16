@@ -1,12 +1,6 @@
-.header{
-    height: 4vh;
-    width: 100vw;
-    background: #6666d1;
-    padding: 2vh;
-}
+
 
 .controls{
-    width: 90vw;
     display: flex;
     direction: row;
     justify-content: space-evenly;
@@ -28,12 +22,6 @@ canvas{
       user-select: none;
 }
   
-body {
-      background: #c795aa;
-      color: white;
-      padding: 0 !important;
-      margin: 0 !important;
-}
 
 canvas#spectrum {
     border-top: 1px solid black;
@@ -48,25 +36,25 @@ canvas#waveform {
                 0 3px 4px rgba(0,0,0,0.7);
 }
 .visual_container{
-    width: 90vw;
+    /* width: 90vw; */
     display: flex;
     justify-content: space-evenly;
     flex-flow: row wrap;
-    height: 40vh;
+    /* height: 40vh; */
 }
 .analyser_container{
-    width: 40vw;
+    /* width: 40vw; */
     display: flex;
     justify-content: flex-start;
     flex-flow: column wrap;
 }
 .visualizer{
-    width: 40vw;
-    height: 15vh;
+    /* width: 40vw;
+    height: 15vh; */
 }
 .wave_draw_canvas{
-    width: 40vw;
-    height: 30vh;
+    /* width: 40vw;
+    height: 30vh; */
 }
 .slider {
     -webkit-appearance: none;  /* Override default CSS styles */

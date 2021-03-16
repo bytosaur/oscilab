@@ -1,7 +1,6 @@
 
 // Start off by initializing a new context.
 context = new (AudioContext || webkitAudioContext)();
-
 /*
 * ===========
 * oscillators
@@ -282,6 +281,7 @@ waveform.addEventListener('mousemove', (e) => {
         waveformDrawBuffer[index] = waveform.height - e.offsetY;
         createWave ();
         drawWave ();
+        context.resume()
     }
 });
 
@@ -328,59 +328,68 @@ function visualizeSpectrogramm() {
                 }
             }
         }
-        // append the current FFTbuffer
-        for (let i = 0; i < HEIGHT; i++) {
-            // avg values from fft data
-            var avgNum = parseInt(bufferLength/2 / HEIGHT);
-            var sum = 0;
-            for (let avgIndex = 0; avgIndex < avgNum; avgIndex++) {
-                sum += dataArray[i * avgNum + avgIndex];
-            }
-            sum /= avgNum;
-
-            // write the RGBA value
-            min_data = 0;
-            max_temp = 255;
-            half_temp = 128;
-            max_data = 1;
-
-            // get element and normalize it
-            sum = (sum - min_data) / (max_data - min_data);
-            sum *= max_temp;
-
-            // sanity 
-            if (sum < 0 || sum > max_temp){
-                console.log("EERRROORR");
-            }
-
-            // map to rgb temp code
-            if (sum <= half_temp){ 
-                // no red
-                red = -2*sum + max_temp;
-
-                // calc blue color
-                blue = sum * 2;
-
-                // calc green color
-                green = -2*sum + max_temp;
-            }
+        // for (let i = 0; i < HEIGHT; i++) {
+        //     newImgData.data[i * (WIDTH*4) + j*4 + col] = imgData.data[(i) * (WIDTH*4) + (j+1)*4 + col];
             
-            else {  
-                // no blue
-                blue = max_temp;
+        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 0] = red;  
+        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 1] = green;  
+        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 2] = blue;   
+        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 3] = 255;
+        // }   
+        // append the current FFTbuffer
+        // for (let i = 0; i < HEIGHT; i++) {
+        //     // avg values from fft data
+        //     var avgNum = parseInt(bufferLength/2 / HEIGHT);
+        //     var sum = 0;
+        //     for (let avgIndex = 0; avgIndex < avgNum; avgIndex++) {
+        //         sum += dataArray[i * avgNum + avgIndex];
+        //     }
+        //     sum /= avgNum;
 
-                // calc red color
-                green = (sum - half_temp) * 2;
+        //     // write the RGBA value
+        //     min_data = 0;
+        //     max_temp = 255;
+        //     half_temp = 128;
+        //     max_data = 1;
 
-                // calc green color
-                red = 0;
-            }
+        //     // get element and normalize it
+        //     // sum = (sum - min_data) / (max_data - min_data);
+        //     // sum *= max_temp;
 
-            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 0] = red;  
-            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 1] = green;  
-            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 2] = blue;   
-            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 3] = 255;      
-        }
+        //     sum = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+        //     // sanity 
+        //     if (sum < 0 || sum > max_temp){
+        //         console.log("EERRROORR");
+        //     }
+
+        //     // map to rgb temp code
+        //     if (sum <= half_temp){ 
+        //         // no red
+        //         red = -2*sum + max_temp;
+
+        //         // calc blue color
+        //         blue = sum * 2;
+
+        //         // calc green color
+        //         green = -2*sum + max_temp;
+        //     }
+            
+        //     else {  
+        //         // no blue
+        //         blue = max_temp;
+
+        //         // calc red color
+        //         green = (sum - half_temp) * 2;
+
+        //         // calc green color
+        //         red = 0;
+        //     }
+
+        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 0] = red;  
+        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 1] = green;  
+        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 2] = blue;   
+        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 3] = 255;      
+        // }
         // draw image data
         spectrogrammCtx.putImageData(newImgData, 0, 0);
     }
