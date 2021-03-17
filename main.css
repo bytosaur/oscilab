@@ -15,7 +15,6 @@ body {
 .content-div {
 	max-width: 780px;
 	margin: 0 auto;
-	padding: 1em;
 	text-align: justify;
 }
 
@@ -29,6 +28,7 @@ header{
 #topline {
 	display: flex;
 	justify-content: space-between;
+	align-items: center;
 }
 
 
