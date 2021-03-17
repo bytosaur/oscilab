@@ -46,15 +46,15 @@
                     </div>
                     <div class="sliderdiv">
                         <div>pitch</div>
-                        <input type="range" orient="vertical" min="1" max="100" value="46" class="slider" id="freq_slider">
+                        <input type="range" orient="vertical" value="46" class="slider" id="freq_slider">
                     </div>
                     <div class="sliderdiv">
                         <div>main</div>
-                        <input type="range" orient="vertical" min="1" max="100" value="50" class="slider" id="amp_slider">
+                        <input type="range" orient="vertical" value="50" class="slider" id="amp_slider">
                     </div>
                     <div class="sliderdiv">
                         <div>sub</div>
-                        <input type="range" orient="vertical" min="1" max="100" value="50" class="slider" id="sub_slider">
+                        <input type="range" orient="vertical" value="50" class="slider" id="sub_slider">
                     </div>
                 </div>
         
@@ -100,6 +100,27 @@
                         <input type="range" min="1" max="100" value="0" class="slider" id="lfo_amp_slider">
                     </div>
                 </div>
+                <div class="slidecontainer" id="slide_con4">
+                    <div class="dropdowndiv">
+                        <h3>
+                            lfo2
+                        </h3> 
+                        <select id="lfo2_type_select">
+                            <option value="triangle">tri</option>
+                            <option value="sine">sin</option>
+                            <option value="square">sqr</option>
+                        </select>
+                        <br>
+                    </div>    
+                    <div class="sliderdiv">
+                        <div>freq</div>
+                        <input type="range" min="1" max="100" value="50" class="slider" id="lfo2_freq_slider">
+                    </div>       
+                    <div class="sliderdiv">
+                        <div>int</div>
+                        <input type="range" min="1" max="100" value="0" class="slider" id="lfo2_amp_slider">
+                    </div>
+                </div>
             </div>
             
             <input type="button" id="mute_button"> mute
@@ -123,7 +144,7 @@
 		<footer>
 			<div id="impressum">
 				<div class="content-div">
-					<p> impressum </p>
+					<span> impressum </span>
 				</div>
 			</div>
 		</footer>

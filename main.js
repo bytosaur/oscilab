@@ -120,6 +120,7 @@ class OscSimple {
     
 var osc = new OscSub (110, 'square', 'sine');
 var lfo = new OscSimple (2, 0, 'sine');
+var lfo2 = new OscSimple (2, 0, 'sine');
 
 /*
 * ==========
@@ -150,7 +151,8 @@ resonance_slider.oninput = function() {
 // freq slider
 var freq_slider = document.getElementById("freq_slider");
 freq_slider.oninput = function() {
-    osc.setFreq(Math.pow(10, this.value/16));
+    freq = 440 * Math.pow(2, (this.value - 69) /12)
+    osc.setFreq(freq);
 }    
 // sub slider
 var sub_slider = document.getElementById("sub_slider");
@@ -165,12 +167,24 @@ amp_slider.oninput = function() {
 // lfo freq slider
 var lfo_freq_slider = document.getElementById("lfo_freq_slider");
 lfo_freq_slider.oninput = function() {
-    lfo.setFreq(this.value/50);
+    freq = 440 * Math.pow(2, (this.value - 150) /12)
+    lfo.setFreq(freq);
 }
 // lfo amp slider
 var lfo_amp_slider = document.getElementById("lfo_amp_slider");
 lfo_amp_slider.oninput = function() {
     lfo.setAmp(Math.pow(2.7, this.value/9));
+} 
+// lfo freq slider
+var lfo2_freq_slider = document.getElementById("lfo2_freq_slider");
+lfo2_freq_slider.oninput = function() {
+    freq = 440 * Math.pow(2, (this.value - 150) /12)
+    lfo2.setFreq(freq);
+}
+// lfo amp slider
+var lfo2_amp_slider = document.getElementById("lfo2_amp_slider");
+lfo2_amp_slider.oninput = function() {
+    lfo2.setAmp(Math.pow(2.7, this.value/9));
 }
 // Selects
 var osc_main_type_select = document.getElementById("osc_main_type_select");
@@ -180,6 +194,10 @@ osc_main_type_select.onchange = function() {
 var lfo_type_select = document.getElementById("lfo_type_select");
 lfo_type_select.onchange = function() {
     lfo.setType(this.value);
+}
+var lfo2_type_select = document.getElementById("lfo2_type_select");
+lfo2_type_select.onchange = function() {
+    lfo2.setType(this.value);
 }
 var osc_main_sub_select = document.getElementById("osc_sub_type_select");
 osc_main_sub_select.onchange = function() {
@@ -227,8 +245,7 @@ waveformCtx.fillStyle = 'rgb(250, 250, 250)';
 waveformCtx.fillRect(0, 0, waveform.width, waveform.height);
 
 // allocate Buffers depending on the width of the window and the width of a frequency
-var steps = 20;
-var stepSize = 30;
+var stepSize = 10;
 var waveformBufferReal = new Float32Array(waveform.width/stepSize);
 var waveformBufferImg = new Float32Array(waveform.width/stepSize);
 var waveformDrawBuffer = new Float32Array(waveform.width/stepSize);
@@ -308,7 +325,7 @@ function visualizeSpectrogramm() {
     WIDTH = spectrogramm.width;
     HEIGHT = spectrogramm.height;
 
-    ana_gramm.fftSize = 2048;
+    ana_gramm.fftSize = 256;
     var bufferLength = ana_gramm.fftSize;
     var dataArray = new Uint8Array(bufferLength);
 
@@ -328,69 +345,69 @@ function visualizeSpectrogramm() {
                 }
             }
         }
-        // for (let i = 0; i < HEIGHT; i++) {
-        //     newImgData.data[i * (WIDTH*4) + j*4 + col] = imgData.data[(i) * (WIDTH*4) + (j+1)*4 + col];
+        for (let i = 0; i < HEIGHT; i++) {
+            data = dataArray[i];
             
+            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 0] = data;  
+            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 1] = data;  
+            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 2] = data;   
+            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 3] = 255;
+        }   
+        // append the current FFTbuffer
+        // for (let i = 0; i < HEIGHT; i++) {
+        //     // avg values from fft data
+        //     var avgNum = parseInt(bufferLength/2 / HEIGHT);
+        //     var sum = 0;
+        //     // for (let avgIndex = 0; avgIndex < avgNum; avgIndex++) {
+        //     //     sum += dataArray[i * avgNum + avgIndex];
+        //     // }
+        //     // sum /= avgNum;
+        //     sum = dataArray[i]
+
+        //     // write the RGBA value
+        //     min_data = 0;
+        //     max_temp = 255;
+        //     half_temp = 128;
+        //     max_data = 1;
+
+        //     // get element and normalize it
+        //     // sum = (sum - min_data) / (max_data - min_data);
+        //     // sum *= max_temp;
+
+        //     // sum = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+        //     // sanity 
+        //     if (sum < 0 || sum > max_temp){
+        //         console.log("EERRROORR");
+        //     }
+
+        //     // map to rgb temp code
+        //     if (sum <= half_temp){ 
+        //         // no red
+        //         red = -2*sum + max_temp;
+
+        //         // calc blue color
+        //         blue = sum * 2;
+
+        //         // calc green color
+        //         green = -2*sum + max_temp;
+        //     }
+            
+        //     else {  
+        //         // no blue
+        //         blue = max_temp;
+
+        //         // calc red color
+        //         green = (sum - half_temp) * 2;
+
+        //         // calc green color
+        //         red = 0;
+        //     }
+
         //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 0] = red;  
         //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 1] = green;  
         //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 2] = blue;   
-        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 3] = 255;
-        // }   
-        // append the current FFTbuffer
-        for (let i = 0; i < HEIGHT; i++) {
-            // avg values from fft data
-            var avgNum = parseInt(bufferLength/2 / HEIGHT);
-            var sum = 0;
-            // for (let avgIndex = 0; avgIndex < avgNum; avgIndex++) {
-            //     sum += dataArray[i * avgNum + avgIndex];
-            // }
-            // sum /= avgNum;
-            sum = dataArray[i]
-
-            // write the RGBA value
-            min_data = 0;
-            max_temp = 255;
-            half_temp = 128;
-            max_data = 1;
-
-            // get element and normalize it
-            // sum = (sum - min_data) / (max_data - min_data);
-            // sum *= max_temp;
-
-            // sum = (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-            // sanity 
-            if (sum < 0 || sum > max_temp){
-                console.log("EERRROORR");
-            }
-
-            // map to rgb temp code
-            if (sum <= half_temp){ 
-                // no red
-                red = -2*sum + max_temp;
-
-                // calc blue color
-                blue = sum * 2;
-
-                // calc green color
-                green = -2*sum + max_temp;
-            }
-            
-            else {  
-                // no blue
-                blue = max_temp;
-
-                // calc red color
-                green = (sum - half_temp) * 2;
-
-                // calc green color
-                red = 0;
-            }
-
-            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 0] = red;  
-            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 1] = green;  
-            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 2] = blue;   
-            newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 3] = 255;      
-        }
+        //     newImgData.data[i * (WIDTH*4) + (WIDTH-1)*4 + 3] = 255;      
+        // }
         // draw image data
         spectrogrammCtx.putImageData(newImgData, 0, 0);
     }
@@ -442,12 +459,14 @@ function visualizeWaveform() {
 ===============*/
 
 lfo.connect(filter.frequency);
+lfo2.connect(osc.osc_main.frequency);
 osc.connect(filter);
 filter.connect(ana_spec);    
 ana_spec.connect(ana_gramm);
 ana_gramm.connect(context.destination);
 osc.start();
 lfo.start();
+lfo2.start();
 
 visualizeWaveform();
 visualizeSpectrogramm();
