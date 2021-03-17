@@ -3,20 +3,24 @@
 .controls{
     display: flex;
     direction: row;
-    justify-content: space-evenly;
+    flex-wrap: wrap;
+    justify-content: space-around;
 }
 
 .slidecontainer {
-    margin-top: 12px;
     display: flex;
-    flex-flow: row wrap;
+    flex-direction: row;
+    /* padding: 25px; */
 }
 
 .sliderdiv {
-    display: flex;
-    direction: column;
+    display: block;
+    text-align: center;
 }
-
+.dropdowndiv{
+    display: block;
+    text-align: center;
+}
 
 canvas{
       user-select: none;
@@ -24,16 +28,16 @@ canvas{
   
 
 canvas#spectrum {
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
-                0 3px 4px rgba(0,0,0,0.7);
+    /* border-top: 1px solid black;
+    border-bottom: 1px solid black; */
+    /* box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
+                0 3px 4px rgba(0,0,0,0.7); */
 }
 canvas#waveform {
-    border-top: 1px solid black;
-    border-bottom: 1px solid black;
-    box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
-                0 3px 4px rgba(0,0,0,0.7);
+    /* border-top: 1px solid black;
+    border-bottom: 1px solid black; */
+    /* box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
+                0 3px 4px rgba(0,0,0,0.7); */
 }
 .visual_container{
     /* width: 90vw; */
@@ -92,6 +96,6 @@ input[type=range]
     writing-mode: bt-lr; /* IE */
     -webkit-appearance: slider-vertical; /* WebKit */
     width: 8px;
-    height: 175px;
+    /* height: 175px; */
     padding: 0 5px;    
 }

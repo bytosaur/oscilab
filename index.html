@@ -17,7 +17,7 @@
 		<header>
 			<div class="content-div" id="topline">
 				<h1 id="title">
-					~ freaqLAB
+					oscar
 				</h1>
 				<img src="logo.png" id="logo">
 			</div>
@@ -26,69 +26,78 @@
 
             <div class="controls">
                 <div class="slidecontainer" id="slide_con">
-                    <h3>
-                        osc
-                    </h3>
-                    <div class="sliderdiv">
-                        <div>pitch</div>
-                        <input type="range" orient="vertical" min="1" max="100" value="50" class="slider" id="freq_slider">
+                    <div class="dropdowndiv">
+                        <h3>
+                            osc
+                        </h3>
+                        <select id="osc_main_type_select">
+                            <option value="triangle">tri</option>
+                            <option value="sine">sin</option>
+                            <option value="square">sqr</option>
+                        </select>
+                        <br>
+                        <select id="osc_sub_type_select">
+                            <option value="triangle">tri</option>
+                            <option value="sine">sin</option>
+                            <option value="square">sqr</option>
+                        </select>
+                        <br>
                     </div>
                     <div class="sliderdiv">
-                        <div>main amp</div>
+                        <div>pitch</div>
+                        <input type="range" orient="vertical" min="1" max="100" value="46" class="slider" id="freq_slider">
+                    </div>
+                    <div class="sliderdiv">
+                        <div>main</div>
                         <input type="range" orient="vertical" min="1" max="100" value="50" class="slider" id="amp_slider">
                     </div>
                     <div class="sliderdiv">
-                        <div>sub amp</div>
+                        <div>sub</div>
                         <input type="range" orient="vertical" min="1" max="100" value="50" class="slider" id="sub_slider">
                     </div>
-                    <select id="osc_main_type_select">
-                        <option value="triangle">tri</option>
-                        <option value="sine">sin</option>
-                        <option value="square">sqr</option>
-                    </select>
-                    <select id="osc_sub_type_select">
-                        <option value="triangle">tri</option>
-                        <option value="sine">sin</option>
-                        <option value="square">sqr</option>
-                    </select>
                 </div>
         
                 <div class="slidecontainer" id="slide_con2">
-                    <h3>
-                        lpf
-                    </h3>
+                    <div class="dropdowndiv">
+                        <h3>
+                            filter
+                        </h3>
+                        <select id="filter_type_select">
+                            <option value="highpass">hp</option>
+                            <option value="lowpass">lp</option>
+                            <option value="bandpass">bp</option>
+                        </select>
+                    </div>
                     <div class="sliderdiv">
-                        <div>cutoff</div>
+                        <div>fc</div>
                         <input type="range" min="1" max="100" value="50" class="slider" id="cutoff_slider">
                     </div>
                     <div class="sliderdiv">
-                        <div>resonance</div>
+                        <div>res</div>
                         <input type="range" min="1" max="100" value="50" class="slider" id="resonance_slider">
                     </div>
-                    <select id="filter_type_select">
-                        <option value="highpass">hp</option>
-                        <option value="lowpass">lp</option>
-                        <option value="bandpass">bp</option>
-                    </select>
                 </div>
         
                 <div class="slidecontainer" id="slide_con3">
-                    <h3>
-                        lfo
-                    </h3>        
+                    <div class="dropdowndiv">
+                        <h3>
+                            lfo
+                        </h3> 
+                        <select id="lfo_type_select">
+                            <option value="triangle">tri</option>
+                            <option value="sine">sin</option>
+                            <option value="square">sqr</option>
+                        </select>
+                        <br>
+                    </div>    
                     <div class="sliderdiv">
-                        <div>frequency</div>
+                        <div>freq</div>
                         <input type="range" min="1" max="100" value="50" class="slider" id="lfo_freq_slider">
                     </div>       
                     <div class="sliderdiv">
-                        <div>intensity</div>
+                        <div>int</div>
                         <input type="range" min="1" max="100" value="0" class="slider" id="lfo_amp_slider">
                     </div>
-                    <select id="lfo_type_select">
-                        <option value="triangle">tri</option>
-                        <option value="sine">sin</option>
-                        <option value="square">sqr</option>
-                        </select>
                 </div>
             </div>
             
