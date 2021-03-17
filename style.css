@@ -10,7 +10,6 @@
 .slidecontainer {
     display: flex;
     flex-direction: row;
-    /* padding: 25px; */
 }
 
 .sliderdiv {
@@ -28,37 +27,22 @@ canvas{
   
 
 canvas#spectrum {
-    /* border-top: 1px solid black;
-    border-bottom: 1px solid black; */
-    /* box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
-                0 3px 4px rgba(0,0,0,0.7); */
 }
 canvas#waveform {
-    /* border-top: 1px solid black;
-    border-bottom: 1px solid black; */
-    /* box-shadow: 0 -2px 4px rgba(0,0,0,0.7),
-                0 3px 4px rgba(0,0,0,0.7); */
 }
 .visual_container{
-    /* width: 90vw; */
     display: flex;
     justify-content: space-evenly;
     flex-flow: row wrap;
-    /* height: 40vh; */
 }
 .analyser_container{
-    /* width: 40vw; */
     display: flex;
     justify-content: flex-start;
     flex-flow: column wrap;
 }
 .visualizer{
-    /* width: 40vw;
-    height: 15vh; */
 }
 .wave_draw_canvas{
-    /* width: 40vw;
-    height: 30vh; */
 }
 .slider {
     -webkit-appearance: none;  /* Override default CSS styles */
@@ -96,6 +80,5 @@ input[type=range]
     writing-mode: bt-lr; /* IE */
     -webkit-appearance: slider-vertical; /* WebKit */
     width: 8px;
-    /* height: 175px; */
     padding: 0 5px;    
 }
