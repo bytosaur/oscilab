@@ -1,6 +1,7 @@
 
 // Start off by initializing a new context.
 context = new (AudioContext || webkitAudioContext)();
+
 /*
 * ===========
 * oscillators
@@ -132,109 +133,9 @@ var filter = context.createBiquadFilter();
 filter.type = 'lowpass'; // Low-pass filter. See BiquadFilterNode docs
 filter.frequency.value = 440; // Set cutoff to 440 HZ
 
-/*
-* ======
-* Slider
-* ======
-*/    
-// cutoff slider
-var cutoff_slider = document.getElementById("cutoff_slider");
-cutoff_slider.oninput = function() {
-    filter.frequency.value = Math.pow(2.7, this.value/9);
-}    
-// resonance slider
-var resonance_slider = document.getElementById("resonance_slider");
-resonance_slider.oninput = function() {
-    filter.Q.value = Math.pow(2.7, this.value/9);
-}
-
-// freq slider
-var freq_slider = document.getElementById("freq_slider");
-freq_slider.oninput = function() {
-    freq = 440 * Math.pow(2, (this.value - 69) /12)
-    osc.setFreq(freq);
-}    
-// sub slider
-var sub_slider = document.getElementById("sub_slider");
-sub_slider.oninput = function() {
-    osc.setAmpSub(this.value/100);
-}      
-// amp slider
-var amp_slider = document.getElementById("amp_slider");
-amp_slider.oninput = function() {
-    osc.setAmpMain(this.value/100);
-}    
-// lfo freq slider
-var lfo_freq_slider = document.getElementById("lfo_freq_slider");
-lfo_freq_slider.oninput = function() {
-    freq = 440 * Math.pow(2, (this.value - 150) /12)
-    lfo.setFreq(freq);
-}
-// lfo amp slider
-var lfo_amp_slider = document.getElementById("lfo_amp_slider");
-lfo_amp_slider.oninput = function() {
-    lfo.setAmp(Math.pow(2.7, this.value/9));
-} 
-// lfo freq slider
-var lfo2_freq_slider = document.getElementById("lfo2_freq_slider");
-lfo2_freq_slider.oninput = function() {
-    freq = 440 * Math.pow(2, (this.value - 150) /12)
-    lfo2.setFreq(freq);
-}
-// lfo amp slider
-var lfo2_amp_slider = document.getElementById("lfo2_amp_slider");
-lfo2_amp_slider.oninput = function() {
-    lfo2.setAmp(Math.pow(2.7, this.value/9));
-}
-// Selects
-var osc_main_type_select = document.getElementById("osc_main_type_select");
-osc_main_type_select.onchange = function() {
-    osc.setTypeMain(this.value);
-}
-var lfo_type_select = document.getElementById("lfo_type_select");
-lfo_type_select.onchange = function() {
-    lfo.setType(this.value);
-}
-var lfo2_type_select = document.getElementById("lfo2_type_select");
-lfo2_type_select.onchange = function() {
-    lfo2.setType(this.value);
-}
-var osc_main_sub_select = document.getElementById("osc_sub_type_select");
-osc_main_sub_select.onchange = function() {
-    osc.setTypeSub(this.value);
-}
-var filter_type_select = document.getElementById("filter_type_select");
-filter_type_select.onchange = function() {
-    filter.type = (this.value);
-}
-var drawSpectrum = false;
-var wave_draw_select = document.getElementById("wave_draw_select");
-wave_draw_select.onchange = function() {
-    drawSpectrum = this.value;
-    createWave();
-    drawWave();
-}
-
-/*=============
-=== Buttons ===
-===============*/
-var muted = false;
-var mute_button = document.getElementById("mute_button");
-mute_button.onclick = function() {
-    if(muted){
-        muted = false;
-        osc.unmute();
-    }
-    else{
-        muted = true;
-        osc.mute();
-    }
-}
-
 /*===============
 === Wave Form ===
 ===============*/
-
 // get the canvas and paint it white
 var waveform = document.getElementById("waveform");
 var waveformCtx = waveform.getContext("2d");
@@ -244,11 +145,28 @@ waveform.height = waveform.getClientRects()[0].height;
 waveformCtx.fillStyle = 'rgb(250, 250, 250)';
 waveformCtx.fillRect(0, 0, waveform.width, waveform.height);
 
+function drawWave () {
+    waveformCtx.fillStyle = 'rgb(250, 250, 250)';
+    waveformCtx.fillRect(0, 0, waveform.width, waveform.height);
+    waveformCtx.fillStyle = 'rgb(0, 0, 0)';
+    for (var i = 0; i < waveformDrawBuffer.length; i++){
+        var rectStartX = i * stepSize;
+        var rectStartY = waveform.height - waveformDrawBuffer[i];
+        var rectWidth = stepSize;
+        var rectHeight = waveformDrawBuffer[i];
+        waveformCtx.fillRect(rectStartX, rectStartY, rectWidth, rectHeight);
+    }
+}
+
 // allocate Buffers depending on the width of the window and the width of a frequency
 var stepSize = 10;
 var waveformBufferReal = new Float32Array(waveform.width/stepSize);
 var waveformBufferImg = new Float32Array(waveform.width/stepSize);
 var waveformDrawBuffer = new Float32Array(waveform.width/stepSize);
+waveformDrawBuffer
+for (var i = 0; i < waveformDrawBuffer.length; i++){
+    waveformDrawBuffer[i] = Math.sin(i * 2 * Math.PI / (waveform.width/stepSize)) * waveform.height /2 + waveform.height/2;
+}
 
 function computeDft(inreal, inimag) {
 	var n = inreal.length;
@@ -268,6 +186,9 @@ function computeDft(inreal, inimag) {
 	return [outreal, outimag];
 }
 function createWave(){
+    for (let i = 0; i < waveformDrawBuffer.length; i++) {
+        waveformBufferReal[i] = waveformDrawBuffer[i] /waveform.height;
+    }
     if(drawSpectrum == "frequency")
         osc.setWave(context.createPeriodicWave(waveformBufferReal, waveformBufferImg));
     else{
@@ -275,32 +196,21 @@ function createWave(){
         osc.setWave(context.createPeriodicWave(dft[0], dft[1]));
     }   
 }
-function drawWave () {
-    waveformCtx.fillStyle = 'rgb(250, 250, 250)';
-    waveformCtx.fillRect(0, 0, waveform.width, waveform.height);
-    waveformCtx.fillStyle = 'rgb(0, 0, 0)';
-    for (var i = 0; i < waveformDrawBuffer.length; i++){
-        var rectStartX = i * stepSize;
-        var rectStartY = waveform.height - waveformDrawBuffer[i];
-        var rectWidth = stepSize;
-        var rectHeight = waveformDrawBuffer[i];
-        waveformCtx.fillRect(rectStartX, rectStartY, rectWidth, rectHeight);
-    }
-}
+
 waveform.addEventListener('mousemove', (e) => {       
      if(e.buttons == 1){ // if mouse is clicked    
         waveformCtx.fillStyle = 'rgb(0, 0, 0)';
         var index = parseInt(e.offsetX / stepSize);
-        var divider = e.offsetY;
-        if (e.offsetY == 0)
-            divider = 0.0001;
-        waveformBufferReal[index] = (waveform.height - divider) /   waveform.height;
         waveformDrawBuffer[index] = waveform.height - e.offsetY;
-        createWave ();
-        drawWave ();
-        context.resume()
+        updateWave();
     }
 });
+
+function updateWave(){
+    createWave ();
+    drawWave ();
+    context.resume();
+}
 
 /*==================
 ===== Analyser =====
@@ -454,9 +364,114 @@ function visualizeWaveform() {
     draw();
 }  
 
+
+/*===============
+=== Control ===
+===============*/
+
+/*
+* ======
+* Slider
+* ======
+*/    
+// cutoff slider
+var cutoff_slider = document.getElementById("cutoff_slider");
+cutoff_slider.oninput = function() {
+    filter.frequency.value = Math.pow(2.7, this.value/9);
+}    
+// resonance slider
+var resonance_slider = document.getElementById("resonance_slider");
+resonance_slider.oninput = function() {
+    filter.Q.value = Math.pow(2.7, this.value/9);
+}
+
+// freq slider
+var freq_slider = document.getElementById("freq_slider");
+freq_slider.oninput = function() {
+    freq = 440 * Math.pow(2, (this.value - 69) /12)
+    osc.setFreq(freq);
+}    
+// sub slider
+var sub_slider = document.getElementById("sub_slider");
+sub_slider.oninput = function() {
+    osc.setAmpSub(this.value/100);
+}      
+// amp slider
+var amp_slider = document.getElementById("amp_slider");
+amp_slider.oninput = function() {
+    osc.setAmpMain(this.value/100);
+}    
+// lfo freq slider
+var lfo_freq_slider = document.getElementById("lfo_freq_slider");
+lfo_freq_slider.oninput = function() {
+    freq = 440 * Math.pow(2, (this.value - 150) /12)
+    lfo.setFreq(freq);
+}
+// lfo amp slider
+var lfo_amp_slider = document.getElementById("lfo_amp_slider");
+lfo_amp_slider.oninput = function() {
+    lfo.setAmp(Math.pow(2.7, this.value/9));
+} 
+// lfo freq slider
+var lfo2_freq_slider = document.getElementById("lfo2_freq_slider");
+lfo2_freq_slider.oninput = function() {
+    freq = 440 * Math.pow(2, (this.value - 150) /12)
+    lfo2.setFreq(freq);
+}
+// lfo amp slider
+var lfo2_amp_slider = document.getElementById("lfo2_amp_slider");
+lfo2_amp_slider.oninput = function() {
+    lfo2.setAmp(Math.pow(2.7, this.value/9));
+}
+// Selects
+var osc_main_type_select = document.getElementById("osc_main_type_select");
+osc_main_type_select.onchange = function() {
+    osc.setTypeMain(this.value);
+}
+var lfo_type_select = document.getElementById("lfo_type_select");
+lfo_type_select.onchange = function() {
+    lfo.setType(this.value);
+}
+var lfo2_type_select = document.getElementById("lfo2_type_select");
+lfo2_type_select.onchange = function() {
+    lfo2.setType(this.value);
+}
+var osc_main_sub_select = document.getElementById("osc_sub_type_select");
+osc_main_sub_select.onchange = function() {
+    osc.setTypeSub(this.value);
+}
+var filter_type_select = document.getElementById("filter_type_select");
+filter_type_select.onchange = function() {
+    filter.type = (this.value);
+}
+var drawSpectrum = false;
+var wave_draw_select = document.getElementById("wave_draw_select");
+wave_draw_select.onchange = function() {
+    drawSpectrum = this.value;
+    updateWave();
+}
+
+/*=============
+=== Buttons ===
+===============*/
+var muted = false;
+var mute_button = document.getElementById("mute_button");
+mute_button.onclick = function() {
+    if(muted){
+        muted = false;
+        osc.unmute();
+    }
+    else{
+        muted = true;
+        osc.mute();
+    }
+}
+
+
 /*===============
 === data flow ===
 ===============*/
+
 
 lfo.connect(filter.frequency);
 lfo2.connect(osc.osc_main.frequency);
@@ -470,3 +485,5 @@ lfo2.start();
 
 visualizeWaveform();
 visualizeSpectrogramm();
+
+updateWave();
