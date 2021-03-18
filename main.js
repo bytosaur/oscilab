@@ -20,7 +20,7 @@ context = new (AudioContext || webkitAudioContext)();
 // cutoff slider
 var cutoff_slider = document.getElementById("cutoff_slider");
 cutoff_slider.oninput = function() {
-    filter.frequency.value = 440 * Math.pow(2, (this.value - 100) /12) ;
+    filter.frequency.value = 440 * Math.pow(2, (this.value - 80) /12) ;
 }    
 // resonance slider
 var resonance_slider = document.getElementById("resonance_slider");
@@ -51,7 +51,7 @@ lfo_freq_slider.oninput = function() {
 // lfo amp slider
 var lfo_amp_slider = document.getElementById("lfo_amp_slider");
 lfo_amp_slider.oninput = function() {
-    lfo2.setAmpFromRange(this.value);
+    lfo.setAmpFromRange(this.value);
 } 
 // lfo freq slider
 var lfo2_freq_slider = document.getElementById("lfo2_freq_slider");
@@ -246,7 +246,8 @@ lfo.setAmpFromRange(lfo2_amp_slider.value);
 var filter = context.createBiquadFilter();
 // Create and specify parameters for the low-pass filter.
 filter.type = 'lowpass'; // Low-pass filter. See BiquadFilterNode docs
-filter.frequency.value = cutoff_slider.value; // Set cutoff to 440 HZ
+filter.frequency.value = 440 * Math.pow(2, (cutoff_slider.value- 80) /12);
+filter.Q.value = 0;
 
 /*===============
 === Wave Form ===
