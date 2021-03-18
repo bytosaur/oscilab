@@ -46,15 +46,15 @@
                     </div>
                     <div class="sliderdiv">
                         <div>pitch</div>
-                        <input type="range" orient="vertical" value="46" class="slider" id="freq_slider">
+                        <input type="range" orient="vertical" min="1" max="100" value="69" class="slider" id="freq_slider">
                     </div>
                     <div class="sliderdiv">
                         <div>main</div>
-                        <input type="range" orient="vertical" value="50" class="slider" id="amp_slider">
+                        <input type="range" orient="vertical" min="1" max="100" value="120" class="slider" id="amp_slider">
                     </div>
                     <div class="sliderdiv">
                         <div>sub</div>
-                        <input type="range" orient="vertical" value="50" class="slider" id="sub_slider">
+                        <input type="range" orient="vertical"  min="0" max="100" value="0" class="slider" id="sub_slider">
                     </div>
                 </div>
         
@@ -64,8 +64,8 @@
                             filter
                         </h3>
                         <select id="filter_type_select">
-                            <option value="highpass">hp</option>
                             <option value="lowpass">lp</option>
+                            <option value="highpass">hp</option>
                             <option value="bandpass">bp</option>
                         </select>
                     </div>
@@ -93,11 +93,11 @@
                     </div>    
                     <div class="sliderdiv">
                         <div>freq</div>
-                        <input type="range" min="1" max="100" value="50" class="slider" id="lfo_freq_slider">
+                        <input type="range" min="0" max="100" value="50" class="slider" id="lfo_freq_slider">
                     </div>       
                     <div class="sliderdiv">
                         <div>int</div>
-                        <input type="range" min="1" max="100" value="0" class="slider" id="lfo_amp_slider">
+                        <input type="range" min="0" max="100" value="0" class="slider" id="lfo_amp_slider">
                     </div>
                 </div>
                 <div class="slidecontainer" id="slide_con4">
@@ -114,11 +114,11 @@
                     </div>    
                     <div class="sliderdiv">
                         <div>freq</div>
-                        <input type="range" min="1" max="100" value="50" class="slider" id="lfo2_freq_slider">
+                        <input type="range" min="0" max="100" value="50" class="slider" id="lfo2_freq_slider">
                     </div>       
                     <div class="sliderdiv">
                         <div>int</div>
-                        <input type="range" min="1" max="100" value="0" class="slider" id="lfo2_amp_slider">
+                        <input type="range" min="0" max="100" value="0" class="slider" id="lfo2_amp_slider">
                     </div>
                 </div>
             </div>

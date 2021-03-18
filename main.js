@@ -8,6 +8,106 @@ context = new (AudioContext || webkitAudioContext)();
 * ===========
 */ 
 
+/*===============
+=== Control ===
+===============*/
+
+/*
+* ======
+* Slider
+* ======
+*/    
+// cutoff slider
+var cutoff_slider = document.getElementById("cutoff_slider");
+cutoff_slider.oninput = function() {
+    filter.frequency.value = 440 * Math.pow(2, (this.value - 100) /12) ;
+}    
+// resonance slider
+var resonance_slider = document.getElementById("resonance_slider");
+resonance_slider.oninput = function() {
+    filter.Q.value = Math.pow(2.7, this.value/9);
+}
+
+// freq slider
+var freq_slider = document.getElementById("freq_slider");
+freq_slider.oninput = function() {
+    osc.setFreqFromRange(this.value);
+}    
+// sub slider
+var sub_slider = document.getElementById("sub_slider");
+sub_slider.oninput = function() {
+    osc.setAmpSub(this.value/100);
+}      
+// amp slider
+var amp_slider = document.getElementById("amp_slider");
+amp_slider.oninput = function() {
+    osc.setAmpMain(this.value/100);
+}    
+// lfo freq slider
+var lfo_freq_slider = document.getElementById("lfo_freq_slider");
+lfo_freq_slider.oninput = function() {
+    lfo.setFreqFromRange(this.value);
+}
+// lfo amp slider
+var lfo_amp_slider = document.getElementById("lfo_amp_slider");
+lfo_amp_slider.oninput = function() {
+    lfo2.setAmpFromRange(this.value);
+} 
+// lfo freq slider
+var lfo2_freq_slider = document.getElementById("lfo2_freq_slider");
+lfo2_freq_slider.oninput = function() {
+    lfo2.setFreqFromRange(this.value);
+}
+// lfo amp slider
+var lfo2_amp_slider = document.getElementById("lfo2_amp_slider");
+lfo2_amp_slider.oninput = function() {
+    lfo2.setAmpFromRange(this.value);
+}
+// Selects
+var lfo_type_select = document.getElementById("lfo_type_select");
+lfo_type_select.onchange = function() {
+    lfo.setType(this.value);
+}
+var lfo2_type_select = document.getElementById("lfo2_type_select");
+lfo2_type_select.onchange = function() {
+    lfo2.setType(this.value);
+}
+var osc_main_type_select = document.getElementById("osc_main_type_select");
+osc_main_type_select.onchange = function() {
+    osc.setTypeMain(this.value);
+}
+var osc_main_sub_select = document.getElementById("osc_sub_type_select");
+osc_main_sub_select.onchange = function() {
+    osc.setTypeSub(this.value);
+}
+var filter_type_select = document.getElementById("filter_type_select");
+filter_type_select.onchange = function() {
+    filter.type = (this.value);
+}
+var drawSpectrum = false;
+var wave_draw_select = document.getElementById("wave_draw_select");
+wave_draw_select.onchange = function() {
+    drawSpectrum = this.value;
+    updateWave();
+}
+
+/*=============
+=== Buttons ===
+===============*/
+var muted = false;
+var mute_button = document.getElementById("mute_button");
+mute_button.onclick = function() {
+    if(muted){
+        muted = false;
+        osc.unmute();
+    }
+    else{
+        muted = true;
+        osc.mute();
+    }
+}
+
+
 class OscSub {
 
     constructor(freq, type, type2){
@@ -20,6 +120,7 @@ class OscSub {
 
         this.amp_sub = context.createGain();
         this.amp_sub.connect(this.amp_mix);
+        this.amp_sub.gain.value = 0;
 
         this.osc_main = context.createOscillator();
         this.osc_main.type = type;
@@ -30,11 +131,15 @@ class OscSub {
         this.osc_sub.type = type2;
         this.osc_sub.frequency.value = freq / 2;
         this.osc_sub.connect(this.amp_sub);
+        this.start_note = 69;
     }
 
     setFreq (freq) {
         this.osc_main.frequency.value = freq;
         this.osc_sub.frequency.value = freq / 2;
+    }       
+    setFreqFromRange (value) {
+        this.setFreq( 440 * Math.pow(2, (value - this.start_note) /12) );
     }        
     setWave (wave) {
         this.osc_main.setPeriodicWave(wave);
@@ -84,11 +189,15 @@ class OscSimple {
         this.osc.type = type;
         this.osc.frequency.value = freq;
         this.osc.connect(this.amp);
+        this.start_note = 150;
     }
 
     setFreq (freq) {
         this.osc.frequency.value = freq;
     }
+    setFreqFromRange (value) {
+        this.setFreq(440 * Math.pow(2, (value - this.start_note) /12) );
+    }        
 
     setPeriodicWave(wave){
         this.osc.setPeriodicWave(wave);
@@ -101,7 +210,9 @@ class OscSimple {
     setAmp(amp){
         this.amp.gain.value = amp;
     }
-
+    setAmpFromRange(value){
+        this.amp.gain.value = Math.pow(2.7, value/9);
+    }
     mute(){
         this.gain = this.amp.gain.value;
         this.amp.gain.value = 0;
@@ -119,10 +230,14 @@ class OscSimple {
     }
 }
     
-var osc = new OscSub (110, 'square', 'sine');
-var lfo = new OscSimple (2, 0, 'sine');
-var lfo2 = new OscSimple (2, 0, 'sine');
-
+var osc = new OscSub (1, osc_main_type_select.value, osc_main_sub_select.value);
+osc.setFreqFromRange(freq_slider.value);
+var lfo = new OscSimple (1, 0, lfo_type_select.value);
+lfo.setFreqFromRange(lfo_freq_slider.value);
+lfo.setAmpFromRange(lfo_amp_slider.value);
+var lfo2 = new OscSimple (1, 0, lfo2_type_select.value);
+lfo.setFreqFromRange(lfo2_freq_slider.value);
+lfo.setAmpFromRange(lfo2_amp_slider.value);
 /*
 * ==========
 * the filter
@@ -131,7 +246,7 @@ var lfo2 = new OscSimple (2, 0, 'sine');
 var filter = context.createBiquadFilter();
 // Create and specify parameters for the low-pass filter.
 filter.type = 'lowpass'; // Low-pass filter. See BiquadFilterNode docs
-filter.frequency.value = 440; // Set cutoff to 440 HZ
+filter.frequency.value = cutoff_slider.value; // Set cutoff to 440 HZ
 
 /*===============
 === Wave Form ===
@@ -366,112 +481,10 @@ function visualizeWaveform() {
 
 
 /*===============
-=== Control ===
-===============*/
-
-/*
-* ======
-* Slider
-* ======
-*/    
-// cutoff slider
-var cutoff_slider = document.getElementById("cutoff_slider");
-cutoff_slider.oninput = function() {
-    filter.frequency.value = Math.pow(2.7, this.value/9);
-}    
-// resonance slider
-var resonance_slider = document.getElementById("resonance_slider");
-resonance_slider.oninput = function() {
-    filter.Q.value = Math.pow(2.7, this.value/9);
-}
-
-// freq slider
-var freq_slider = document.getElementById("freq_slider");
-freq_slider.oninput = function() {
-    freq = 440 * Math.pow(2, (this.value - 69) /12)
-    osc.setFreq(freq);
-}    
-// sub slider
-var sub_slider = document.getElementById("sub_slider");
-sub_slider.oninput = function() {
-    osc.setAmpSub(this.value/100);
-}      
-// amp slider
-var amp_slider = document.getElementById("amp_slider");
-amp_slider.oninput = function() {
-    osc.setAmpMain(this.value/100);
-}    
-// lfo freq slider
-var lfo_freq_slider = document.getElementById("lfo_freq_slider");
-lfo_freq_slider.oninput = function() {
-    freq = 440 * Math.pow(2, (this.value - 150) /12)
-    lfo.setFreq(freq);
-}
-// lfo amp slider
-var lfo_amp_slider = document.getElementById("lfo_amp_slider");
-lfo_amp_slider.oninput = function() {
-    lfo.setAmp(Math.pow(2.7, this.value/9));
-} 
-// lfo freq slider
-var lfo2_freq_slider = document.getElementById("lfo2_freq_slider");
-lfo2_freq_slider.oninput = function() {
-    freq = 440 * Math.pow(2, (this.value - 150) /12)
-    lfo2.setFreq(freq);
-}
-// lfo amp slider
-var lfo2_amp_slider = document.getElementById("lfo2_amp_slider");
-lfo2_amp_slider.oninput = function() {
-    lfo2.setAmp(Math.pow(2.7, this.value/9));
-}
-// Selects
-var osc_main_type_select = document.getElementById("osc_main_type_select");
-osc_main_type_select.onchange = function() {
-    osc.setTypeMain(this.value);
-}
-var lfo_type_select = document.getElementById("lfo_type_select");
-lfo_type_select.onchange = function() {
-    lfo.setType(this.value);
-}
-var lfo2_type_select = document.getElementById("lfo2_type_select");
-lfo2_type_select.onchange = function() {
-    lfo2.setType(this.value);
-}
-var osc_main_sub_select = document.getElementById("osc_sub_type_select");
-osc_main_sub_select.onchange = function() {
-    osc.setTypeSub(this.value);
-}
-var filter_type_select = document.getElementById("filter_type_select");
-filter_type_select.onchange = function() {
-    filter.type = (this.value);
-}
-var drawSpectrum = false;
-var wave_draw_select = document.getElementById("wave_draw_select");
-wave_draw_select.onchange = function() {
-    drawSpectrum = this.value;
-    updateWave();
-}
-
-/*=============
-=== Buttons ===
-===============*/
-var muted = false;
-var mute_button = document.getElementById("mute_button");
-mute_button.onclick = function() {
-    if(muted){
-        muted = false;
-        osc.unmute();
-    }
-    else{
-        muted = true;
-        osc.mute();
-    }
-}
-
-
-/*===============
 === data flow ===
 ===============*/
 
+updateWave();
 
 lfo.connect(filter.frequency);
 lfo2.connect(osc.osc_main.frequency);
