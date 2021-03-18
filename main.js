@@ -232,6 +232,7 @@ class OscSimple {
     
 var osc = new OscSub (1, osc_main_type_select.value, osc_main_sub_select.value);
 osc.setFreqFromRange(freq_slider.value);
+osc.setAmpMix(amp_slider.value/100);
 var lfo = new OscSimple (1, 0, lfo_type_select.value);
 lfo.setFreqFromRange(lfo_freq_slider.value);
 lfo.setAmpFromRange(lfo_amp_slider.value);
@@ -314,6 +315,7 @@ function createWave(){
 }
 
 waveform.addEventListener('mousemove', (e) => {       
+    context.resume();
      if(e.buttons == 1){ // if mouse is clicked    
         waveformCtx.fillStyle = 'rgb(0, 0, 0)';
         var index = parseInt(e.offsetX / stepSize);
@@ -327,6 +329,7 @@ function updateWave(){
     drawWave ();
     context.resume();
 }
+
 
 /*==================
 ===== Analyser =====
@@ -489,6 +492,7 @@ updateWave();
 
 lfo.connect(filter.frequency);
 lfo2.connect(osc.osc_main.frequency);
+lfo2.connect(osc.osc_sub.frequency);
 osc.connect(filter);
 filter.connect(ana_spec);    
 ana_spec.connect(ana_gramm);
